@@ -25,3 +25,7 @@ plugins {
 dependencies {
     implementation("androidx.core:core-ktx:${LibraryVersions.ANDROIDX_CORE}")
 }
+
+android {
+  namespace = "me.vkryl.core"
+}
