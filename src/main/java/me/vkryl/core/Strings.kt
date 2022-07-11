@@ -112,6 +112,8 @@ fun indexOfAny(source: CharSequence, target: CharArray, startIndex: Int = 0): In
 
 fun length(str: CharSequence?): Int = str?.length ?: 0
 
+fun String?.limit (limit: Int): String? = if (this.isNullOrEmpty() || this.length <= limit) this else this.substring(0, limit)
+
 @SuppressWarnings("DefaultLocale")
 @kotlin.ExperimentalStdlibApi
 fun ucfirst(str: String?, locale: Locale? = null): String? {
