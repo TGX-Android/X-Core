@@ -20,6 +20,6 @@
 
 package me.vkryl.core.lambda;
 
-interface FutureBool {
-  fun get (): Boolean
+fun interface FutureBool {
+  fun get(): Boolean
 }

@@ -14,11 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File created on 11/07/2017
+ * File created on 26/02/2018
  */
+package me.vkryl.core.reference
 
-package me.vkryl.core.lambda;
-
-public interface RunnableData<T> {
-  void runWithData (T arg);
+// TODO maybe something more efficient?
+class ReferenceIntMap<T> : ReferenceMap<Int?, T> {
+  constructor() : super(false)
+  constructor(isThreadSafe: Boolean) : super(isThreadSafe)
+  constructor(
+    isThreadSafe: Boolean,
+    fullnessListener: FullnessListener<Int?, T>?,
+  ) : super(isThreadSafe, true, fullnessListener)
 }

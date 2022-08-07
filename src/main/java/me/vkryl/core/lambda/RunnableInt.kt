@@ -14,18 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File created on 11/06/2018
+ * File created on 08/03/2018
  */
+package me.vkryl.core.lambda
 
-package me.vkryl.core.reference;
-
-import androidx.annotation.NonNull;
-
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
-
-public interface ReferenceCreator<T> {
-  default Reference<T> newReference (@NonNull T item) {
-    return new WeakReference<>(item);
-  }
+fun interface RunnableInt {
+  fun runWithInt(arg: Int)
 }

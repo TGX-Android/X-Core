@@ -20,6 +20,6 @@
 
 package me.vkryl.core.lambda;
 
-interface Future<T> {
+fun interface Future<T> {
   fun get(): T
 }

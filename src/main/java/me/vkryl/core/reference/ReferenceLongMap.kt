@@ -16,25 +16,14 @@
  *
  * File created on 26/02/2018
  */
-
-package me.vkryl.core.reference;
-
-import androidx.annotation.Nullable;
-
-/**
- * Date:
- * Author: default
- */
+package me.vkryl.core.reference
 
 // TODO maybe something more efficient?
-public class ReferenceLongMap<T> extends ReferenceMap<Long, T> {
-  public ReferenceLongMap () { }
-
-  public ReferenceLongMap (boolean isThreadSafe) {
-    super(isThreadSafe);
-  }
-
-  public ReferenceLongMap (boolean isThreadSafe, @Nullable FullnessListener<Long, T> fullnessListener) {
-    super(isThreadSafe, true, fullnessListener);
-  }
+class ReferenceLongMap<T> : ReferenceMap<Long?, T> {
+  constructor() : super(false)
+  constructor(isThreadSafe: Boolean) : super(isThreadSafe)
+  constructor(
+    isThreadSafe: Boolean,
+    fullnessListener: FullnessListener<Long?, T>?
+  ) : super(isThreadSafe, true, fullnessListener)
 }

@@ -24,9 +24,21 @@ import android.os.Handler
 import androidx.core.os.CancellationSignal
 
 abstract class CancellableRunnable : Runnable {
+
+  val isPending: Boolean
+    get() = !signal.isCanceled
+
   private val signal = CancellationSignal()
   private var attachedToHandler: Handler? = null
   private val lock = Any()
+
+  abstract fun act()
+
+  override fun run() {
+    if (!signal.isCanceled) {
+      act()
+    }
+  }
 
   fun cancel() {
     signal.cancel()
@@ -42,16 +54,5 @@ abstract class CancellableRunnable : Runnable {
       signal.setOnCancelListener(null)
     }
     return this
-  }
-
-  val isPending: Boolean
-    get() = !signal.isCanceled
-
-  abstract fun act()
-
-  final override fun run() {
-    if (!signal.isCanceled) {
-      act()
-    }
   }
 }

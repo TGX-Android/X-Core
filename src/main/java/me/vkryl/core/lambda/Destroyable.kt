@@ -20,6 +20,6 @@
 
 package me.vkryl.core.lambda
 
-interface Destroyable {
+fun interface Destroyable {
   fun performDestroy()
 }

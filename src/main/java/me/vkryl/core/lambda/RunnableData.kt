@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File created on 08/03/2018
+ * File created on 11/07/2017
  */
+package me.vkryl.core.lambda
 
-package me.vkryl.core.lambda;
-
-public interface RunnableInt {
-  void runWithInt (int arg);
+fun interface RunnableData<T> {
+  fun runWithData(arg: T)
 }

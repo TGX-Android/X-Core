@@ -14,22 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File created on 26/02/2018
+ * File created on 11/06/2018
  */
+package me.vkryl.core.reference
 
-package me.vkryl.core.reference;
+import java.lang.ref.Reference
+import java.lang.ref.WeakReference
 
-// TODO maybe something more efficient?
-public class ReferenceIntMap<T> extends ReferenceMap<Integer, T> {
-  public ReferenceIntMap () {
-    super(false);
-  }
+interface ReferenceCreator<T> {
 
-  public ReferenceIntMap (boolean isThreadSafe) {
-    super(isThreadSafe);
-  }
-
-  public ReferenceIntMap (boolean isThreadSafe, ReferenceMap.FullnessListener<Integer, T> fullnessListener) {
-    super(isThreadSafe, true, fullnessListener);
-  }
+    fun newReference(item: T): Reference<T> {
+        return WeakReference(item)
+    }
 }

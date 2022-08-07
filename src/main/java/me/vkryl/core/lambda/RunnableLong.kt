@@ -16,9 +16,8 @@
  *
  * File created on 08/07/2017
  */
+package me.vkryl.core.lambda
 
-package me.vkryl.core.lambda;
-
-public interface RunnableLong {
-  void runWithLong (long arg);
+fun interface RunnableLong {
+  fun runWithLong(arg: Long)
 }

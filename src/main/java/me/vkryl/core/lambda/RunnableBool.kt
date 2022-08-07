@@ -14,13 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File created on 21/04/2018
+ * File created on 11/07/2017
  */
+package me.vkryl.core.lambda
 
-package me.vkryl.core.util;
-
-public interface BlobEntry {
-  int estimatedBinarySize ();
-  void saveTo (Blob blob);
-  void restoreFrom (Blob blob);
+fun interface RunnableBool {
+  fun runWithBool(arg: Boolean)
 }
