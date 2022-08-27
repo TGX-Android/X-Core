@@ -105,6 +105,9 @@ public abstract class RawSet <T extends Number & Comparable<T>> implements Itera
 
   protected final int[][] toIntArray (int limit) {
     final int size = size();
+    if (size == 0) {
+      return new int[0][];
+    }
     if (size <= limit) {
       return new int[][] {toIntArray()};
     }
@@ -135,6 +138,9 @@ public abstract class RawSet <T extends Number & Comparable<T>> implements Itera
 
   protected final long[][] toLongArray (int limit) {
     final int size = size();
+    if (size == 0) {
+      return new long[0][];
+    }
     if (size <= limit) {
       return new long[][] {toLongArray()};
     }
