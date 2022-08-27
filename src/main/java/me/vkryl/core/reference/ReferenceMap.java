@@ -94,6 +94,13 @@ public class ReferenceMap<K, T> {
     }
   }
 
+  @Nullable
+  public final ReferenceList<T> removeAll (K key) {
+    synchronized (map) {
+      return map.remove(key);
+    }
+  }
+
   public final void remove (K key, @NonNull T item) {
     synchronized (map) {
       ReferenceList<T> list = map.get(key);

@@ -19,25 +19,24 @@
 
 package me.vkryl.core.collection;
 
-import androidx.annotation.NonNull;
+import java.util.Collection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-
-public class IntSet implements Iterable<Integer> {
-  private final ArrayList<Integer> sortedList;
-
+public class IntSet extends RawSet<Integer> {
   public IntSet () {
-    this.sortedList = new ArrayList<>();
+    super();
   }
 
   public IntSet (int initialCapacity) {
-    this.sortedList = new ArrayList<>(initialCapacity);
+    super(initialCapacity);
   }
 
-  public void ensureCapacity (int minCapacity) {
-    this.sortedList.ensureCapacity(minCapacity);
+  public IntSet (Collection<Integer> source) {
+    super(source);
+  }
+
+  public IntSet (int[] source) {
+    super(source.length);
+    addAll(source);
   }
 
   public void addAll (int... items) {
@@ -46,40 +45,11 @@ public class IntSet implements Iterable<Integer> {
     }
   }
 
-  public boolean add (int item) {
-    int position = Collections.binarySearch(sortedList, item);
-    if (position >= 0) {
-      return false;
-    }
-    position = (-position) - 1;
-    sortedList.add(position, item);
-    return true;
+  public int[] toArray () {
+    return toIntArray();
   }
 
-  public boolean remove (int item) {
-    int position = Collections.binarySearch(sortedList, item);
-    if (position < 0) {
-      return false;
-    }
-    sortedList.remove(position);
-    return true;
-  }
-
-  public void clear () {
-    sortedList.clear();
-  }
-
-  public boolean has (int item) {
-    return Collections.binarySearch(sortedList, item) >= 0;
-  }
-
-  public int size () {
-    return sortedList.size();
-  }
-
-  @NonNull
-  @Override
-  public Iterator<Integer> iterator () {
-    return sortedList.iterator();
+  public int[][] toArray (int limit) {
+    return toIntArray(limit);
   }
 }
