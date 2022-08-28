@@ -115,7 +115,7 @@ public abstract class RawSet <T extends Number & Comparable<T>> implements Itera
     int[][] result = new int[arrayCount][];
     int index = 0;
     for (T item : this) {
-      int arrayIndex = index / arrayCount;
+      int arrayIndex = index / limit;
       int itemIndex = index - limit * arrayIndex;
       if (itemIndex == 0) {
         result[arrayIndex] = new int[Math.min(limit, size - index)];
@@ -148,7 +148,7 @@ public abstract class RawSet <T extends Number & Comparable<T>> implements Itera
     long[][] result = new long[arrayCount][];
     int index = 0;
     for (T item : this) {
-      int arrayIndex = index / arrayCount;
+      int arrayIndex = index / limit;
       int itemIndex = index - limit * arrayIndex;
       if (itemIndex == 0) {
         result[arrayIndex] = new long[Math.min(limit, size - index)];
