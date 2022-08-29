@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import java.lang.ref.Reference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -242,6 +243,8 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
           itr.nextItem = null;
         }
         return itr;
+      } else if (items.isEmpty()) {
+        return Collections.emptyIterator();
       } else {
         return new Itr();
       }
@@ -249,8 +252,8 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
   }
 
   private final class Itr implements Iterator<T> {
-    protected int index = items.size();
-    protected T nextItem;
+    private int index = items.size();
+    private T nextItem;
 
     @Override
     public final boolean hasNext () {
