@@ -48,24 +48,18 @@ fun isEmptyOrInvisible(str: CharSequence?): Boolean {
   }
 }
 
-fun String?.trim(): String? = this?.trim()
+fun trim (str: String?): String? {
+  return if (!str.isNullOrEmpty())
+    str.trim()
+  else
+    str
+}
 
-fun CharSequence?.trim(): CharSequence? {
-  if (this.isNullOrEmpty())
-    return this
-  var len = this.length
-  var st = 0
-  while ((st < len) && (this[st] <= ' ')) {
-    st++
-  }
-  while ((st < len) && (this[len - 1] <= ' ')) {
-    len--
-  }
-  return if ((st > 0) || (len < this.length)) {
-    this.subSequence(st, len)
-  } else {
-    this
-  }
+fun trim (cs: CharSequence?): CharSequence? {
+  return if (!cs.isNullOrEmpty())
+    cs.trim()
+  else
+    cs
 }
 
 fun isDomain(str: String?): Boolean = !(str == null || str.contains('/'))
