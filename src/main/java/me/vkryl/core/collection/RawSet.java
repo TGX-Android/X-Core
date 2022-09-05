@@ -55,6 +55,14 @@ public abstract class RawSet <T extends Number & Comparable<T>> implements Itera
     this.set.addAll(items.set);
   }
 
+  public void removeAll (Collection<T> items) {
+    this.set.removeAll(items);
+  }
+
+  public void removeAll (RawSet<T> items) {
+    this.set.removeAll(items.set);
+  }
+
   public boolean add (T item) {
     return this.set.add(item);
   }
