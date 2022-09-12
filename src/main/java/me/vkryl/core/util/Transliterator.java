@@ -415,16 +415,31 @@ public class Transliterator {
     int prefixLength = 0;
     int contentLength = 0;
 
+    int prefixSeparatorLength = 0;
+    int contentSeparatorLength = 0;
+
     while (start + contentLength < end && prefixStart + prefixLength < prefixEnd) {
       int contentCodePoint = content.codePointAt(start + contentLength);
       int contentCodePointSize = Character.charCount(contentCodePoint);
+      int contentCodePointType = Character.getType(contentCodePoint);
+      boolean contentCodePointIsSeparator =
+        contentCodePointType == Character.SPACE_SEPARATOR ||
+        contentCodePointType == Character.LINE_SEPARATOR;
 
       int prefixCodePoint = prefix.codePointAt(prefixStart + prefixLength);
       int prefixCodePointSize = Character.charCount(prefixCodePoint);
+      int prefixCodePointType = Character.getType(prefixCodePoint);
+      boolean prefixCodePointIsSeparator =
+        prefixCodePointType == Character.SPACE_SEPARATOR ||
+        prefixCodePointType == Character.LINE_SEPARATOR;
 
-      if (contentCodePoint == prefixCodePoint) {
+      if (contentCodePoint == prefixCodePoint || (contentCodePointIsSeparator && prefixCodePointIsSeparator)) {
         contentLength += contentCodePointSize;
         prefixLength += prefixCodePointSize;
+        if (contentCodePointIsSeparator && prefixCodePointIsSeparator) {
+          contentSeparatorLength += contentCodePointSize;
+          prefixSeparatorLength += prefixCodePointSize;
+        }
         continue;
       }
 
@@ -1035,7 +1050,8 @@ public class Transliterator {
       contentLength += addContentSize;
     }
 
-    if (contentLength > 0 && prefixLength > 0) {
+    // Force ignore lookup result if only separators were found
+    if (contentLength - contentSeparatorLength > 0 && prefixLength - prefixSeparatorLength > 0) {
       return new PrefixResult(contentLength, prefixLength);
     }
     return null;
