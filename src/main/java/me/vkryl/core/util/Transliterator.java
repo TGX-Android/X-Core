@@ -21,6 +21,8 @@ package me.vkryl.core.util;
 
 import androidx.annotation.Nullable;
 
+import me.vkryl.core.StringUtils;
+
 public class Transliterator {
   public static boolean hasCyrillicLetters (String str) {
     return hasCyrillicLetters(str, 0, str.length());
@@ -433,7 +435,7 @@ public class Transliterator {
         prefixCodePointType == Character.SPACE_SEPARATOR ||
         prefixCodePointType == Character.LINE_SEPARATOR;
 
-      if (contentCodePoint == prefixCodePoint || (contentCodePointIsSeparator && prefixCodePointIsSeparator)) {
+      if (contentCodePoint == prefixCodePoint || (contentCodePointIsSeparator && prefixCodePointIsSeparator) || StringUtils.normalizeCodePoint(contentCodePoint) == StringUtils.normalizeCodePoint(prefixCodePoint)) {
         contentLength += contentCodePointSize;
         prefixLength += prefixCodePointSize;
         if (contentCodePointIsSeparator && prefixCodePointIsSeparator) {

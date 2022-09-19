@@ -87,6 +87,8 @@ fun String.match(pattern: Pattern): String? {
   }
 }
 
+fun normalizeCodePoint(codePoint: Int) = Character.toLowerCase(codePoint) // TODO: add an option to remove diacritics when they will be properly supported by server
+
 @JvmOverloads fun parseInt(str: String?, defaultValue: Int = 0): Int = str?.toIntOrNull() ?: defaultValue
 @JvmOverloads fun parseLong(str: String?, defaultValue: Long = 0): Long = str?.toLongOrNull() ?: defaultValue
 @JvmOverloads fun parseFloat(str: String?, defaultValue: Float = 0.0f): Float = str?.toFloatOrNull() ?: defaultValue
