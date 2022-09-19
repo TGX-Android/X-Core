@@ -612,13 +612,19 @@ public class Transliterator {
             break;
           }
           case 'C': case 'c': {
-            // C -> К, С, Ц, Ch -> Ч
+            // C -> К, С, Ц, Ch -> Ч, Ck -> К
             switch (contentCodePoint) {
               case 'С': case 'c':
-              case 'К': case 'к':
               case 'Ц': case 'ц':
                 addPrefixSize = prefixCodePointSize;
                 addContentSize = contentCodePointSize;
+                break;
+              case 'К': case 'к':
+                addPrefixSize = prefixCodePointSize;
+                addContentSize = contentCodePointSize;
+                if ((nextPrefixCodePoint == 'K' || nextPrefixCodePoint == 'k') && !(nextContentCodePoint == 'К' || nextContentCodePoint == 'к')) {
+                  addPrefixSize += nextPrefixCodePointSize;
+                }
                 break;
               case 'Ч': case 'ч':
                 if (nextPrefixCodePoint == 'H' || nextPrefixCodePoint == 'h') {
@@ -834,8 +840,16 @@ public class Transliterator {
           case 'К': case 'к':
             switch (contentCodePoint) {
               case 'K': case 'k':
-              case 'C': case 'c':
                 ok = true;
+                break;
+              case 'C': case 'c':
+                if ((nextContentCodePoint == 'K' || nextContentCodePoint == 'k') && (nextPrefixCodePoint != 'К' && nextPrefixCodePoint != 'к')) {
+                  // К <-> Ck
+                  addPrefixSize = prefixCodePointSize;
+                  addContentSize = contentCodePointSize + nextContentCodePointSize;
+                } else {
+                  ok = true;
+                }
                 break;
               case 'X':
                 if (nextPrefixCodePoint == 'С' || nextPrefixCodePoint == 'c') {
