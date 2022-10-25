@@ -123,6 +123,11 @@ fun unzip(zipFile: File, targetDirectory: File) {
   }
 }
 
+fun mkdirs(dir: File): Boolean {
+  // Force use mkdir() first to avoid any incorrectly behaving mkdirs() on bugged OEMs
+  return dir.mkdir() || dir.mkdirs()
+}
+
 fun getAllFiles(dir: File): Array<File> {
   val result: MutableList<File> = ArrayList()
   getAllFiles(dir, result)
