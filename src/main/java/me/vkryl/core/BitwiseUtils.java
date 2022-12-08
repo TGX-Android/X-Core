@@ -46,6 +46,10 @@ public final class BitwiseUtils {
     return flags;
   }
 
+  public static int optional (int flag, boolean condition) {
+    return condition ? flag : 0;
+  }
+
   public static int hashCode (long x) {
     return (int) (x ^ (x >>> 32));
   }
