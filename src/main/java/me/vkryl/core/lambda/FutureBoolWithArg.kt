@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * File created on 08/12/2019
- * Reworked to kotlin in 2022
+ * File created on 15/02/2023
  */
 
 package me.vkryl.core.lambda
 
-interface FutureInt {
-  fun get (): Int
+interface FutureBoolWithArg<ArgumentType> {
+  fun get (arg: ArgumentType): Boolean
 }

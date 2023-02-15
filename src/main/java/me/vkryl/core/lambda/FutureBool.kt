@@ -18,7 +18,7 @@
  * Reworked to kotlin in 2022
  */
 
-package me.vkryl.core.lambda;
+package me.vkryl.core.lambda
 
 interface FutureBool {
   fun get (): Boolean

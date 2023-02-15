@@ -18,7 +18,7 @@
  * Reworked to kotlin in 2020
  */
 
-package me.vkryl.core.lambda;
+package me.vkryl.core.lambda
 
 interface Future<T> {
   fun get(): T
