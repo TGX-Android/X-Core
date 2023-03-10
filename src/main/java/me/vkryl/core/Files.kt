@@ -110,7 +110,7 @@ fun unzip(zipFile: File, targetDirectory: File) {
       if (!file.canonicalPath.startsWith(targetDirectory.canonicalPath))
         throw SecurityException()
       val dir = if (entry.isDirectory) file else file.parentFile
-      if (!dir.isDirectory && !dir.mkdirs()) throw FileNotFoundException("Failed to ensure directory: " +
+      if (!dir.isDirectory && !mkdirs(dir)) throw FileNotFoundException("Failed to ensure directory: " +
         dir.absolutePath)
       if (entry.isDirectory) continue
       FileOutputStream(file).use { fout -> while (stream.read(buffer).also { count = it } != -1) fout.write(buffer, 0, count) }
