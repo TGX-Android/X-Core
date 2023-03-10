@@ -128,6 +128,14 @@ fun mkdirs(dir: File): Boolean {
   return dir.mkdir() || dir.mkdirs()
 }
 
+fun createDirectory(dir: File): Boolean {
+  return if (dir.exists()) {
+    dir.isDirectory
+  } else {
+    mkdirs(dir)
+  }
+}
+
 fun getAllFiles(dir: File): Array<File> {
   val result: MutableList<File> = ArrayList()
   getAllFiles(dir, result)
