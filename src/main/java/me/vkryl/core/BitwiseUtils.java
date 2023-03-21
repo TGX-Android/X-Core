@@ -20,12 +20,20 @@ package me.vkryl.core;
 public final class BitwiseUtils {
   private BitwiseUtils () { }
 
-  public static boolean getFlag (int flags, int flag) {
+  public static boolean hasFlag (int flags, int flag) {
     return (flags & flag) != 0;
   }
 
-  public static boolean getFlag (long flags, long flag) {
+  public static boolean hasFlag (long flags, long flag) {
     return (flags & flag) != 0;
+  }
+
+  public static boolean hasAllFlags (int flags, int flag) {
+    return (flags & flag) == flag;
+  }
+
+  public static boolean hasAllFlags (long flags, long flag) {
+    return (flags & flag) == flag;
   }
 
   public static int setFlag (int flags, int flag, boolean enabled) {
