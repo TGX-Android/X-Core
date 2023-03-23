@@ -22,8 +22,4 @@ import me.vkryl.core.MathUtils;
 
 public interface FutureFloat {
   float getFloatValue ();
-
-  default float interpolate (float toValue, float factor) {
-    return MathUtils.fromTo(getFloatValue(), toValue, factor);
-  }
 }
