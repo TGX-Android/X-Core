@@ -37,6 +37,6 @@ public class FutureIterator<T> implements Iterator<T> {
 
   @Override
   public T next () {
-    return iterator.next().get();
+    return iterator.next().getValue();
   }
 }

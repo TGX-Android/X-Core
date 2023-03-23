@@ -21,9 +21,9 @@ package me.vkryl.core.lambda;
 import me.vkryl.core.MathUtils;
 
 public interface FutureFloat {
-  float get ();
+  float getFloatValue ();
 
   default float interpolate (float toValue, float factor) {
-    return MathUtils.fromTo(get(), toValue, factor);
+    return MathUtils.fromTo(getFloatValue(), toValue, factor);
   }
 }

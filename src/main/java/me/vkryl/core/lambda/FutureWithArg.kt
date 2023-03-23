@@ -20,5 +20,5 @@
 package me.vkryl.core.lambda
 
 interface FutureWithArg<ArgumentType, ResultType> {
-  fun get(arg: ArgumentType): ResultType
+  fun getValue (arg: ArgumentType): ResultType
 }

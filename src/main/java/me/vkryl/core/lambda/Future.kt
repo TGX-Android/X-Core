@@ -21,5 +21,5 @@
 package me.vkryl.core.lambda
 
 interface Future<T> {
-  fun get(): T
+  fun getValue (): T
 }

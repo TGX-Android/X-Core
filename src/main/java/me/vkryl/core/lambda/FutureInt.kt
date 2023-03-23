@@ -21,5 +21,5 @@
 package me.vkryl.core.lambda
 
 interface FutureInt {
-  fun get (): Int
+  fun getIntValue (): Int
 }

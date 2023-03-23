@@ -20,5 +20,5 @@
 package me.vkryl.core.lambda
 
 interface FutureBoolWithArg<ArgumentType> {
-  fun get (arg: ArgumentType): Boolean
+  fun getBoolValue (arg: ArgumentType): Boolean
 }

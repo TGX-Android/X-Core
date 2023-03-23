@@ -52,7 +52,7 @@ public final class ConditionalExecutor {
   private boolean currentState;
 
   private boolean checkCondition () {
-    boolean newState = condition.get();
+    boolean newState = condition.getBoolValue();
     boolean stateChanged;
     synchronized (lock) {
       stateChanged = this.currentState != newState;

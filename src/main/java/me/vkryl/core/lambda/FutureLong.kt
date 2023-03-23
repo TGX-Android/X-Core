@@ -21,5 +21,5 @@
 package me.vkryl.core.lambda
 
 interface FutureLong {
-  fun get (): Long
+  fun getLongValue (): Long
 }

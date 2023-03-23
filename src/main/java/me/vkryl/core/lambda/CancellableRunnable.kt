@@ -28,11 +28,11 @@ abstract class CancellableRunnable : Runnable {
   private var attachedToHandler: Handler? = null
   private val lock = Any()
 
-  fun cancel() {
+  fun cancel () {
     signal.cancel()
   }
 
-  fun removeOnCancel(handler: Handler?): CancellableRunnable {
+  fun removeOnCancel (handler: Handler?): CancellableRunnable {
     synchronized(lock) { attachedToHandler = handler }
     if (handler != null) {
       signal.setOnCancelListener {
@@ -45,11 +45,11 @@ abstract class CancellableRunnable : Runnable {
   }
 
   val isPending: Boolean
-    get() = !signal.isCanceled
+    get () = !signal.isCanceled
 
-  abstract fun act()
+  abstract fun act ()
 
-  final override fun run() {
+  final override fun run () {
     if (!signal.isCanceled) {
       act()
     }

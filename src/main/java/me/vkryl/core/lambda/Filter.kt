@@ -21,5 +21,5 @@
 package me.vkryl.core.lambda
 
 interface Filter<T> {
-  fun accept(value: T): Boolean
+  fun accept (value: T): Boolean
 }
