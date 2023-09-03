@@ -373,3 +373,11 @@ fun String.multiply(num: Int): String {
   }
   return b.toString()
 }
+
+fun toUtfString(string: CharSequence): String {
+  val b = StringBuilder(string.length)
+  for (charCode in string) {
+    b.append("\\u").append(charCode.code.toString(16))
+  }
+  return b.toString()
+}
