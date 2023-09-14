@@ -22,10 +22,14 @@ package me.vkryl.core.reference;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import me.vkryl.core.util.CombinedIterator;
 
 public class ReferenceMap<K, T> {
   public interface FullnessListener <KK,TT> {
@@ -149,6 +153,21 @@ public class ReferenceMap<K, T> {
     synchronized (map) {
       ReferenceList<T> list = map.get(key);
       return list != null ? list.iterator() : null;
+    }
+  }
+
+  public final @Nullable Iterator<T> combinedIterator () {
+    // Note: when the same object is registered with multiple keys,
+    // it will be returned via iterator.next() the same amount of times as occurrences in the map
+    synchronized (map) {
+      if (map.isEmpty()) {
+        return null;
+      }
+      List<Iterator<T>> iterators = new ArrayList<>(map.size());
+      for (ReferenceList<T> value : map.values()) {
+        iterators.add(value.iterator());
+      }
+      return new CombinedIterator<>(iterators);
     }
   }
 
