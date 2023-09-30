@@ -34,6 +34,23 @@ public final class DateUtils {
   private static @Nullable LocalVar<Date> now, date;
   private static @Nullable LocalVar<Calendar> nowCalendar, calendar;
 
+  public static void clearCache () {
+    synchronized (Date.class) {
+      if (now != null) {
+        now.clear();
+      }
+      if (date != null) {
+        date.clear();
+      }
+      if (nowCalendar != null) {
+        nowCalendar.clear();
+      }
+      if (calendar != null) {
+        calendar.clear();
+      }
+    }
+  }
+
   public static Date getNow () {
     if (now == null) {
       synchronized (Date.class) {

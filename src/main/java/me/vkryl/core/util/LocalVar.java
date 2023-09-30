@@ -96,4 +96,16 @@ public class LocalVar<T> {
       }
     }
   }
+
+  public void clear () {
+    synchronized (this) {
+      mainVar = null;
+      if (looperMap != null) {
+        looperMap.clear();
+      }
+      if (threadMap != null) {
+        threadMap.clear();
+      }
+    }
+  }
 }
