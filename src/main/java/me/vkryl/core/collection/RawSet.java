@@ -101,6 +101,14 @@ public abstract class RawSet <T extends Number & Comparable<T>> implements Itera
     return this.set.iterator();
   }
 
+  public final T minValue () {
+    return set.first();
+  }
+
+  protected final T maxValue () {
+    return set.last();
+  }
+
   protected final int[] toIntArray () {
     final int[] result = new int[size()];
     int index = 0;

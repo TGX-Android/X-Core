@@ -45,6 +45,14 @@ public class LongSet extends RawSet<Long> {
     }
   }
 
+  public long min () {
+    return minValue();
+  }
+
+  public long max () {
+    return maxValue();
+  }
+
   public long[] toArray () {
     return toLongArray();
   }

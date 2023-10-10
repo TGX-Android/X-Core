@@ -45,6 +45,14 @@ public class IntSet extends RawSet<Integer> {
     }
   }
 
+  public int min () {
+    return minValue();
+  }
+
+  public int max () {
+    return maxValue();
+  }
+
   public int[] toArray () {
     return toIntArray();
   }
