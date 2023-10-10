@@ -28,6 +28,10 @@ public final class BitwiseUtils {
     return (flags & flag) != 0;
   }
 
+  public static boolean flagChanged (long flags, long oldFlags, long flag) {
+    return (flags & flag) != (oldFlags & flag);
+  }
+
   public static boolean hasAllFlags (int flags, int flag) {
     return (flags & flag) == flag;
   }
