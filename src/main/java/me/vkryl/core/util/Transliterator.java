@@ -411,6 +411,17 @@ public class Transliterator {
     }
   }
 
+  private static boolean isSeparatorCodePoint (int codePoint) {
+    int codePointType = Character.getType(codePoint);
+    switch (codePointType) {
+      case Character.SPACE_SEPARATOR:
+      case Character.LINE_SEPARATOR:
+      case Character.CONTROL:
+        return true;
+    }
+    return false;
+  }
+
   @Nullable
   public static PrefixResult findPrefix (String content, int start, int end,
                                          String prefix, int prefixStart, int prefixEnd) {
@@ -423,17 +434,11 @@ public class Transliterator {
     while (start + contentLength < end && prefixStart + prefixLength < prefixEnd) {
       int contentCodePoint = content.codePointAt(start + contentLength);
       int contentCodePointSize = Character.charCount(contentCodePoint);
-      int contentCodePointType = Character.getType(contentCodePoint);
-      boolean contentCodePointIsSeparator =
-        contentCodePointType == Character.SPACE_SEPARATOR ||
-        contentCodePointType == Character.LINE_SEPARATOR;
+      boolean contentCodePointIsSeparator = isSeparatorCodePoint(contentCodePoint);
 
       int prefixCodePoint = prefix.codePointAt(prefixStart + prefixLength);
       int prefixCodePointSize = Character.charCount(prefixCodePoint);
-      int prefixCodePointType = Character.getType(prefixCodePoint);
-      boolean prefixCodePointIsSeparator =
-        prefixCodePointType == Character.SPACE_SEPARATOR ||
-        prefixCodePointType == Character.LINE_SEPARATOR;
+      boolean prefixCodePointIsSeparator = isSeparatorCodePoint(prefixCodePoint);
 
       if (contentCodePoint == prefixCodePoint || (contentCodePointIsSeparator && prefixCodePointIsSeparator) || StringUtils.normalizeCodePoint(contentCodePoint) == StringUtils.normalizeCodePoint(prefixCodePoint)) {
         contentLength += contentCodePointSize;
