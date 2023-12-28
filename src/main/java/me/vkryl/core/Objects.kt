@@ -29,6 +29,5 @@ fun <T> requireNonNull (value: T?): T {
 
 fun <T> equals (a: T?, b: T?): Boolean = a === b || (a != null && a == b)
 
-fun hashCode (vararg a: Int): Int = a.contentHashCode()
-fun hashCode (vararg a: Long): Int = a.contentHashCode()
+fun hash (vararg a: Int): Int = a.contentHashCode()
 fun hashCode (vararg a: Any?): Int = a.contentHashCode()
