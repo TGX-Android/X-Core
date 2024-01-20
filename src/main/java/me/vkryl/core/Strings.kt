@@ -121,8 +121,8 @@ fun parseLongArray(str: String?, delimiter: String): LongArray? {
   }
 }
 
-fun indexOf(source: CharSequence, target: String, startIndex: Int = 0): Int = source.indexOf(target, startIndex)
-fun indexOfAny(source: CharSequence, target: CharArray, startIndex: Int = 0): Int = source.indexOfAny(target, startIndex)
+@JvmOverloads fun indexOf(source: CharSequence, target: String, startIndex: Int = 0): Int = source.indexOf(target, startIndex)
+@JvmOverloads fun indexOfAny(source: CharSequence, target: CharArray, startIndex: Int = 0): Int = source.indexOfAny(target, startIndex)
 
 fun length(str: CharSequence?): Int = str?.length ?: 0
 
