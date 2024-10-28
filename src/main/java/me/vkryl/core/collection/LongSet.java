@@ -45,6 +45,12 @@ public class LongSet extends RawSet<Long> {
     }
   }
 
+  public void removeAll (long... items) {
+    for (long item : items) {
+      remove(item);
+    }
+  }
+
   public long min () {
     return minValue();
   }

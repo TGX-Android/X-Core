@@ -45,6 +45,12 @@ public class IntSet extends RawSet<Integer> {
     }
   }
 
+  public void removeAll (int... items) {
+    for (int item : items) {
+      remove(item);
+    }
+  }
+
   public int min () {
     return minValue();
   }
