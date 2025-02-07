@@ -40,6 +40,7 @@ fun indexOf(array: CharArray?, item: Char): Int = array?.indexOf(item) ?: -1
 fun indexOf(array: LongArray?, item: Long): Int = array?.indexOf(item) ?: -1
 fun indexOf(array: FloatArray?, item: Float): Int = array?.indexOfFirst { it == item } ?: -1
 fun <T> indexOf(array: Array<T>?, item: T?): Int = array?.indexOf(item) ?: -1
+fun <T> indexOf(iterable: Iterable<T>?, item: T?): Int = iterable?.indexOf(item) ?: -1
 
 fun contains(array: IntArray?, item: Int): Boolean = array?.contains(item) ?: false
 fun contains(array: CharArray?, item: Char): Boolean = array?.contains(item) ?: false
