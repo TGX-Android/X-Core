@@ -353,3 +353,15 @@ fun <T : Comparable<T>> ArrayList<T>.removeSorted(element: T): Boolean {
     false
   }
 }
+
+fun <T> ArrayList<T>.addAllFiltered(items: Array<T>, condition: (T) -> Boolean): Int {
+  var addedCount = 0
+  this.ensureCapacity(this.size + items.size)
+  items.forEach { item ->
+    if (condition(item)) {
+      this.add(item)
+      addedCount++
+    }
+  }
+  return addedCount
+}
