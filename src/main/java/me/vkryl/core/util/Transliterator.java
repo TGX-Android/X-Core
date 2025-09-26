@@ -530,6 +530,7 @@ public class Transliterator {
                 }
                 break;
             }
+            break;
           }
           case 'P': case 'p': {
             // P -> П, Ph -> Ф
@@ -545,6 +546,7 @@ public class Transliterator {
                 }
                 break;
             }
+            break;
           }
           case 'G': case 'g': {
             switch (contentCodePoint) {
@@ -574,6 +576,7 @@ public class Transliterator {
                 }
                 break;
             }
+            break;
           }
           case 'Z': case 'z': {
             // Z -> З, Zh -> Ж
@@ -638,6 +641,7 @@ public class Transliterator {
                 }
                 break;
             }
+            break;
           }
           case 'A': case 'a': {
             // A -> А, Э, Эй
@@ -723,6 +727,7 @@ public class Transliterator {
                 }
                 break;
             }
+            break;
           }
 
           case 'Y': case 'y':
