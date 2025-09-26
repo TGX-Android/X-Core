@@ -365,3 +365,6 @@ fun <T> ArrayList<T>.addAllFiltered(items: Array<T>, condition: (T) -> Boolean):
   }
   return addedCount
 }
+
+fun <T> hash(vararg items: T): Int =
+  items.contentHashCode()
