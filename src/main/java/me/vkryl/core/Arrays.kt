@@ -368,3 +368,6 @@ fun <T> ArrayList<T>.addAllFiltered(items: Array<T>, condition: (T) -> Boolean):
 
 fun <T> hash(vararg items: T): Int =
   items.contentHashCode()
+
+fun hash(vararg items: Number): Int =
+  items.contentHashCode()
