@@ -22,6 +22,7 @@ package me.vkryl.core
 import android.net.Uri
 import android.os.Build
 import android.text.Spanned
+import androidx.core.text.getSpans
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.nio.charset.Charset
@@ -163,12 +164,12 @@ fun CharSequence.equalsTo(other: CharSequence): Boolean {
       if (this.toString() != other.toString())
         return false
       val thisSpans = if (this is Spanned) {
-        this.getSpans(0, this.length, Object::class.java)
+        this.getSpans<Object>(0, this.length)
       } else {
         null
       }
       val otherSpans = if (other is Spanned) {
-        other.getSpans(0, other.length, Object::class.java)
+        other.getSpans<Object>(0, other.length)
       } else {
         null
       }

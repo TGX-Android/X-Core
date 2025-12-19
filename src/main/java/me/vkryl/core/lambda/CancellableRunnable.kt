@@ -21,16 +21,15 @@
 package me.vkryl.core.lambda
 
 import android.os.Handler
-import androidx.core.os.CancellationSignal
+import me.vkryl.core.CancellationSignal
 
 abstract class CancellableRunnable : Runnable {
   private val signal = CancellationSignal()
   private var attachedToHandler: Handler? = null
   private val lock = Any()
 
-  fun cancel () {
+  fun cancel() =
     signal.cancel()
-  }
 
   fun removeOnCancel (handler: Handler?): CancellableRunnable {
     synchronized(lock) { attachedToHandler = handler }
