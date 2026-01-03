@@ -18,8 +18,6 @@
  */
 package me.vkryl.core.lambda;
 
-import me.vkryl.core.MathUtils;
-
 public interface FutureFloat {
   float getFloatValue ();
 }

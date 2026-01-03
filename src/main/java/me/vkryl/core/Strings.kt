@@ -22,6 +22,7 @@ package me.vkryl.core
 import android.net.Uri
 import android.os.Build
 import android.text.Spanned
+import androidx.core.net.toUri
 import androidx.core.text.getSpans
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
@@ -90,9 +91,15 @@ fun String.match(pattern: Pattern): String? {
 
 fun normalizeCodePoint(codePoint: Int) = Character.toLowerCase(codePoint) // TODO: add an option to remove diacritics when they will be properly supported by server
 
-@JvmOverloads fun parseInt(str: String?, defaultValue: Int = 0): Int = str?.toIntOrNull() ?: defaultValue
-@JvmOverloads fun parseLong(str: String?, defaultValue: Long = 0): Long = str?.toLongOrNull() ?: defaultValue
-@JvmOverloads fun parseFloat(str: String?, defaultValue: Float = 0.0f): Float = str?.toFloatOrNull() ?: defaultValue
+@JvmOverloads
+fun parseInt(str: String?, defaultValue: Int = 0): Int = str?.toIntOrNull() ?: defaultValue
+
+@JvmOverloads
+fun parseLong(str: String?, defaultValue: Long = 0): Long = str?.toLongOrNull() ?: defaultValue
+
+@JvmOverloads
+fun parseFloat(str: String?, defaultValue: Float = 0.0f): Float = str?.toFloatOrNull() ?: defaultValue
+
 fun parseIntArray(str: String?, delimiter: String): IntArray? {
   return if (str.isNullOrBlank()) null else {
     val items = str.split(delimiter)
@@ -122,15 +129,18 @@ fun parseLongArray(str: String?, delimiter: String): LongArray? {
   }
 }
 
-@JvmOverloads fun indexOf(source: CharSequence, target: String, startIndex: Int = 0): Int = source.indexOf(target, startIndex)
-@JvmOverloads fun indexOfAny(source: CharSequence, target: CharArray, startIndex: Int = 0): Int = source.indexOfAny(target, startIndex)
+@JvmOverloads
+fun indexOf(source: CharSequence, target: String, startIndex: Int = 0): Int = source.indexOf(target, startIndex)
+
+@JvmOverloads
+fun indexOfAny(source: CharSequence, target: CharArray, startIndex: Int = 0): Int = source.indexOfAny(target, startIndex)
 
 fun length(str: CharSequence?): Int = str?.length ?: 0
 
 fun String?.limit (limit: Int): String? = if (this.isNullOrEmpty() || this.length <= limit) this else this.substring(0, limit)
 
 @SuppressWarnings("DefaultLocale")
-@kotlin.ExperimentalStdlibApi
+@JvmOverloads
 fun ucfirst(str: String?, locale: Locale? = null): String? {
   return str?.replaceFirstChar {
     if (it.isLowerCase()) {
@@ -145,7 +155,6 @@ fun ucfirst(str: String?, locale: Locale? = null): String? {
   }
 }
 
-@kotlin.ExperimentalStdlibApi
 fun toCamelCase(str: String?): String? {
   return str?.let {
     it.replace("'", "")
@@ -175,7 +184,7 @@ fun CharSequence.equalsTo(other: CharSequence): Boolean {
       }
       if ((thisSpans?.size ?: 0) != (otherSpans?.size ?: 0))
         return false
-      if (thisSpans?.size ?: 0 == 0)
+      if ((thisSpans?.size ?: 0) == 0)
         return true
       require(this is Spanned && thisSpans != null)
       require(other is Spanned && otherSpans != null)
@@ -209,7 +218,6 @@ fun CharSequence?.equalsOrBothEmpty(other: CharSequence?): Boolean {
   return thisEmpty == otherEmpty && (thisEmpty || this!!.equalsTo(other!!))
 }
 @SuppressWarnings("DefaultLocale")
-@kotlin.ExperimentalStdlibApi
 fun equalsOrEmptyIgnoreCase(a: CharSequence?, b: CharSequence?, locale: Locale? = null): Boolean {
   return when (locale) {
     null -> a?.toString()?.lowercase().equalsOrBothEmpty(b?.toString()?.lowercase())
@@ -262,15 +270,14 @@ fun urlWithoutProtocol(url: String): String {
   }
 }
 
-@kotlin.ExperimentalStdlibApi
 fun wrapHttps(url: String?): Uri? {
   if (url.isNullOrEmpty())
     return null
   return try {
-    val uri = Uri.parse(url)
+    val uri = url.toUri()
     val scheme = uri.scheme
     when {
-      scheme.isNullOrEmpty() -> Uri.parse("https://$url")
+      scheme.isNullOrEmpty() -> "https://$url".toUri()
       scheme.lowercase() != scheme -> uri.buildUpon().scheme(scheme.lowercase()).build()
       else -> uri
     }
@@ -334,7 +341,6 @@ fun makeSortId(num: Int): String {
   return res
 }
 
-@kotlin.ExperimentalStdlibApi
 fun String?.secureFileName (): String? {
   if (this.isNullOrEmpty())
     return this

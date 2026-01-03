@@ -21,7 +21,8 @@ package me.vkryl.core
 
 import android.graphics.Color
 
-@JvmOverloads fun parseHexColor (hex: String, allowColorNames: Boolean = true): Int {
+@JvmOverloads
+fun parseHexColor (hex: String, allowColorNames: Boolean = true): Int {
   try {
     when (hex.length) {
       // #RGB
