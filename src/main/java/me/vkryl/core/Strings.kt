@@ -173,12 +173,12 @@ fun CharSequence.equalsTo(other: CharSequence): Boolean {
       if (this.toString() != other.toString())
         return false
       val thisSpans = if (this is Spanned) {
-        this.getSpans<Object>(0, this.length)
+        this.getSpans<Any>(0, this.length)
       } else {
         null
       }
       val otherSpans = if (other is Spanned) {
-        other.getSpans<Object>(0, other.length)
+        other.getSpans<Any>(0, other.length)
       } else {
         null
       }
