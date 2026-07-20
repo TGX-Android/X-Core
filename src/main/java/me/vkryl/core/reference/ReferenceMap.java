@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import me.vkryl.core.lambda.RunnableData;
 import me.vkryl.core.util.CombinedIterator;
 
 public class ReferenceMap<K, T> {
@@ -146,6 +147,16 @@ public class ReferenceMap<K, T> {
         reuse = list;
       }
       map.clear();
+    }
+  }
+
+  public void iterate (K key, RunnableData<T> callback) {
+    Iterator<T> iterator = iterator(key);
+    if (iterator != null) {
+      while (iterator.hasNext()) {
+        T value = iterator.next();
+        callback.runWithData(value);
+      }
     }
   }
 
