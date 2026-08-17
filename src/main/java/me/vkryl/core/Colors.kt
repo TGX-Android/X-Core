@@ -20,39 +20,39 @@
 package me.vkryl.core
 
 import android.graphics.Color
+import androidx.core.graphics.toColorInt
 
 @JvmOverloads
 fun parseHexColor (hex: String, allowColorNames: Boolean = true): Int {
   try {
     when (hex.length) {
       // #RGB
-      3 -> return Color.parseColor(
-        "#" +
+      3 -> return ("#" +
           hex.substring(0, 1) + hex.substring(0, 1) +  // RR
           hex.substring(1, 2) + hex.substring(1, 2) +  // GG
-          hex.substring(2, 3) + hex.substring(2, 3)    // BB
-      )
+          hex.substring(2, 3) + hex.substring(2, 3)
+      ).toColorInt()
       // #RGBA
-      4 -> return Color.parseColor(
+      4 -> return (
         "#" +
           hex.substring(3, 4) + hex.substring(3, 4) +  // AA
           hex.substring(0, 1) + hex.substring(0, 1) +  // RR
           hex.substring(1, 2) + hex.substring(1, 2) +  // GG
           hex.substring(2, 3) + hex.substring(2, 3)    // BB
-      )
+      ).toColorInt()
       // #RRGGBB
-      6 -> return Color.parseColor("#$hex")
+      6 -> return "#$hex".toColorInt()
       // #RRGGBBAA
-      8 -> return Color.parseColor(
+      8 -> return (
         "#" +
           hex.substring(6, 8) +  // AA
           hex.substring(0, 6)    // RRGGBB
-      )
+      ).toColorInt()
     }
   } catch (e: IllegalArgumentException) {
   }
   if (allowColorNames) {
-    return Color.parseColor(hex)
+    return hex.toColorInt()
   }
   throw IllegalArgumentException(hex)
 }

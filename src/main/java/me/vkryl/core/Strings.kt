@@ -35,6 +35,11 @@ val UTF_8: Charset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ja
 
 fun isEmpty(str: CharSequence?): Boolean = str.isNullOrEmpty()
 fun isEmptyOrBlank(str: CharSequence?): Boolean = str.isNullOrBlank()
+@JvmOverloads
+fun String.startsWithIgnoreCase(other: String, startIndex: Int = 0) =
+  this.startsWith(other, startIndex, ignoreCase = true)
+fun String.containsIgnoreCase(other: String) =
+  this.contains(other, ignoreCase = true)
 
 fun isEmptyOrInvisible(str: CharSequence?): Boolean {
   when {
@@ -218,11 +223,10 @@ fun CharSequence?.equalsOrBothEmpty(other: CharSequence?): Boolean {
   return thisEmpty == otherEmpty && (thisEmpty || this!!.equalsTo(other!!))
 }
 @SuppressWarnings("DefaultLocale")
-fun equalsOrEmptyIgnoreCase(a: CharSequence?, b: CharSequence?, locale: Locale? = null): Boolean {
-  return when (locale) {
-    null -> a?.toString()?.lowercase().equalsOrBothEmpty(b?.toString()?.lowercase())
-    else -> a?.toString()?.lowercase(locale).equalsOrBothEmpty(b?.toString()?.lowercase(locale))
-  }
+fun String?.equalsOrEmptyIgnoreCase(other: String?): Boolean {
+  val thisEmpty = isEmpty(this)
+  val otherEmpty = isEmpty(other)
+  return thisEmpty == otherEmpty && (thisEmpty || this!!.equals(other!!, ignoreCase = true))
 }
 
 fun join(separator: String, tokens: IntArray): String = tokens.joinToString(separator)
