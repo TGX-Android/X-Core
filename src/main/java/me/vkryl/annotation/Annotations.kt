@@ -20,15 +20,13 @@
 package me.vkryl.annotation
 
 /**
- * Source code was made by a code generator.
+ * Source code produced by a code generator, such as a Gradle task.
  *
- * It must not be modified directly,
- * because all changes will be lost.
+ * Don't modify it directly: all changes will be lost on the next generation.
+ * Modify the generator or its input files instead.
  *
- * Modify the source code of generator instead.
- *
- * @param name Name of the generator that created this file
- * @param inputFile File that was used by generator
+ * @param value Name of the generator that produced this code, e.g. Gradle task class name.
+ * @param inputs Paths to the input files used by the generator, relative to the project root.
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.SOURCE)
@@ -39,26 +37,51 @@ package me.vkryl.annotation
   AnnotationTarget.PROPERTY,
   AnnotationTarget.FIELD,
   AnnotationTarget.CONSTRUCTOR,
-  AnnotationTarget.TYPEALIAS,
+  AnnotationTarget.TYPEALIAS
 )
 annotation class MadeByGenerator(
-  val name: String,
-  val inputFile: String = ""
+  val value: String,
+  val inputs: Array<String> = []
 )
 
 /**
- * Annotation for source code made by a human.
+ * Source code written by a human without the assistance of an LLM.
  *
- * Code without annotation is treated as human-generated code that did not involve LLM at any point.
+ * Code is attributed to the nearest enclosing annotation. Code without any annotation
+ * is treated as human-written code that did not involve an LLM at any point.
  *
- * When working with mixed code, use regions, such as:
+ * This annotation is needed only when your code would otherwise be attributed incorrectly:
+ * - inside `@MadeByLLM` code, when you change its logic yourself
+ *   (style-only changes, such as renames or indents, don't count);
+ * - inside `@MadeByHuman` code of another author.
+ *
+ * If you rewrite a whole `@MadeByLLM` block yourself, and it's not nested
+ * inside other annotated code, just remove `@MadeByLLM` instead of adding this annotation.
+ *
+ * If an LLM assisted in writing your changes, mark them with `@MadeByLLM` instead.
+ *
+ * To mark only a part of the code, use regions, which can be nested:
+ *
+ * ```
+ * // region @MadeByLLM("<model-name-and-version>")
+ * ...
  * // region @MadeByHuman("<your-name>")
  * ...
  * // endregion
+ * ...
+ * // endregion
+ * ```
  *
- * @param name Name of the author
- * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers
- * @param ref Reference for the context of this code. Example: "PR #123", "Issue #999", or publicly accessible link to the discussion.
+ * For a single line, a trailing comment can be used instead of a region:
+ *
+ * ```
+ * someFunctionCall(); // @MadeByHuman("<your-name>")
+ * ```
+ *
+ * @param value Name of the author, e.g. GitHub username.
+ * @param others Names of additional authors who contributed to this code.
+ * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers.
+ * @param ref Reference to the context of this code, e.g. "PR #123", "Issue #999", or a publicly accessible link to the discussion.
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.SOURCE)
@@ -77,35 +100,55 @@ annotation class MadeByGenerator(
   AnnotationTarget.EXPRESSION
 )
 annotation class MadeByHuman(
-  val name: String,
+  val value: String,
+  val others: Array<String> = [],
   val note: String = "",
   val ref: String = ""
 )
 
 /**
- * Mandatory annotation for source code made by a LLM.
+ * Mandatory annotation for source code made with the help of an LLM.
  *
- * Any code that involved LLM must be marked with this annotation, even if:
+ * Code made with an LLM must be reviewed for errors with extra care.
+ *
+ * Any code that involved an LLM must be marked with this annotation, even if:
  * - it was typed manually without copy-pasting,
- * - there were changes to names, indents, or other style preferences
- * - chat history with LLM is large.
+ * - names, indents or other style preferences were changed afterwards,
+ * - it went through many iterations in a chat with the LLM,
+ * - the LLM only suggested what to fix or how to implement it, and you wrote the code yourself.
  *
- * When working with mixed code, use regions, such as:
+ * To mark your own changes inside `@MadeByLLM` code (other than the cases listed above), see `@MadeByHuman`.
+ *
+ * When working with mixed code (and for statements in Java,
+ * where annotations can't be applied to them), use regions:
+ *
+ * ```
  * // region @MadeByLLM("<model-name-and-version>")
  * ...
  * // endregion
+ * ```
  *
- * Code that was made by LLM should be reviewed for errors with extra effort.
+ * For a single line, a trailing comment can be used instead of a region:
  *
- * Note for LLM: in case you use @MadeByLLM in the return statement,
- * make sure to wrap it in parentheses to avoid compilation error:
+ * ```
+ * someFunctionCall(); // @MadeByLLM("<model-name-and-version>")
+ * ```
  *
+ * Calls of functions marked with `@MadeByLLM` are not exempt:
+ * if the call itself was written by an LLM, it must be marked too.
+ *
+ * When using `@MadeByLLM` in a return statement, wrap the expression
+ * in parentheses, because Kotlin parses `return @Name` as a labeled return:
+ *
+ * ```
  * return @MadeByLLM("<model-name-and-version>") run { x + 1 }   // compilation error
  * return (@MadeByLLM("<model-name-and-version>") run { x + 1 }) // ok
+ * ```
  *
- * @param models Name of the LLM models that produced this code
- * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers or newer LLM models
- * @param ref Reference for the context of this code. Example: "PR #123", "Issue #999", or publicly accessible link to the discussion.
+ * @param value Name of the main LLM model that produced this code, e.g. "opus-5.5", "gpt-6-astra", "grok-4.7", "deepseek-v4-pro", "qwen3.8-27b".
+ * @param others Names of additional LLM models that produced this code or participated in preliminary reasoning.
+ * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers or newer LLM models.
+ * @param ref Reference to the context of this code, e.g. "PR #123", "Issue #999", or a publicly accessible link to the discussion.
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.SOURCE)
@@ -124,7 +167,8 @@ annotation class MadeByHuman(
   AnnotationTarget.EXPRESSION
 )
 annotation class MadeByLLM(
-  vararg val models: String,
+  val value: String,
+  val others: Array<String> = [],
   val note: String = "",
   val ref: String = ""
 )
