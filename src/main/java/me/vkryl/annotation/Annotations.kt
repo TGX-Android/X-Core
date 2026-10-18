@@ -80,7 +80,7 @@ annotation class MadeByGenerator(
  *
  * @param value Name of the author, e.g. GitHub username.
  * @param others Names of additional authors who contributed to this code.
- * @param id Identifier of the change this code belongs to, in kebab-case.
+ * @param id Identifier of the change this code belongs to, in kebab-case. Commits with this code must include it as a `Context-Id: <id>` trailer, one trailer per id.
  * @param ref Public reference to the change, e.g. "PR #123", "Issue #999", or a link to the discussion.
  * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers.
  */
@@ -160,7 +160,7 @@ annotation class MadeByHuman(
  *
  * @param value Name of the main LLM model that produced this code, e.g. "opus-5.5", "gpt-6-astra", "grok-4.7", "deepseek-v4-pro", "qwen3.8-27b".
  * @param others Names of additional LLM models that produced this code or participated in preliminary reasoning.
- * @param id Identifier of the change this code belongs to, in kebab-case.
+ * @param id Identifier of the change this code belongs to, in kebab-case. Commits with this code must include it as a `Context-Id: <id>` trailer, one trailer per id.
  * @param ref Public reference to the change, e.g. "PR #123", "Issue #999", or a link to the discussion.
  * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers or newer LLM models.
  */
