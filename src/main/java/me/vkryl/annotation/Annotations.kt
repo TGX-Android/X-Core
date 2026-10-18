@@ -63,9 +63,9 @@ annotation class MadeByGenerator(
  * To mark only a part of the code, use regions, which can be nested:
  *
  * ```
- * // region @MadeByLLM("<model-name-and-version>")
+ * // region @MadeByLLM("<model-name-and-version>", id = "<change-id>")
  * ...
- * // region @MadeByHuman("<your-name>")
+ * // region @MadeByHuman("<your-name>", id = "<same-or-other-change-id>")
  * ...
  * // endregion
  * ...
@@ -75,13 +75,14 @@ annotation class MadeByGenerator(
  * For a single line, a trailing comment can be used instead of a region:
  *
  * ```
- * someFunctionCall(); // @MadeByHuman("<your-name>")
+ * someFunctionCall(); // @MadeByHuman("<your-name>", id = "<change-id>")
  * ```
  *
  * @param value Name of the author, e.g. GitHub username.
  * @param others Names of additional authors who contributed to this code.
+ * @param id Identifier of the change this code belongs to, in kebab-case.
+ * @param ref Public reference to the change, e.g. "PR #123", "Issue #999", or a link to the discussion.
  * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers.
- * @param ref Reference to the context of this code, e.g. "PR #123", "Issue #999", or a publicly accessible link to the discussion.
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.SOURCE)
@@ -102,8 +103,9 @@ annotation class MadeByGenerator(
 annotation class MadeByHuman(
   val value: String,
   val others: Array<String> = [],
-  val note: String = "",
-  val ref: String = ""
+  val id: String = "",
+  val ref: String = "",
+  val note: String = ""
 )
 
 /**
@@ -122,33 +124,45 @@ annotation class MadeByHuman(
  * When working with mixed code (and for statements in Java,
  * where annotations can't be applied to them), use regions:
  *
- * ```
- * // region @MadeByLLM("<model-name-and-version>")
- * ...
+ * ```java
+ * // region @MadeByLLM("<model-name-and-version>", id = "<change-id>")
+ * // ... LLM code ...
  * // endregion
  * ```
  *
  * For a single line, a trailing comment can be used instead of a region:
  *
- * ```
- * someFunctionCall(); // @MadeByLLM("<model-name-and-version>")
+ * ```java
+ * someFunctionCall(); // @MadeByLLM("<model-name-and-version>", id = "<change-id>")
  * ```
  *
  * Calls of functions marked with `@MadeByLLM` are not exempt:
  * if the call itself was written by an LLM, it must be marked too.
  *
+ * If the call belongs to the same change as the function, `id` can be omitted,
+ * since the function's annotation already has it:
+ *
+ * ```java
+ * someAnnotatedFunctionCall(); // @MadeByLLM("<model-name-and-version>")
+ * ```
+ *
+ * ```kotlin
+ * @MadeByLLM("<model-name-and-version>") someAnnotatedFunctionCall()
+ * ```
+ *
  * When using `@MadeByLLM` in a return statement, wrap the expression
  * in parentheses, because Kotlin parses `return @Name` as a labeled return:
  *
- * ```
+ * ```kotlin
  * return @MadeByLLM("<model-name-and-version>") run { x + 1 }   // compilation error
  * return (@MadeByLLM("<model-name-and-version>") run { x + 1 }) // ok
  * ```
  *
  * @param value Name of the main LLM model that produced this code, e.g. "opus-5.5", "gpt-6-astra", "grok-4.7", "deepseek-v4-pro", "qwen3.8-27b".
  * @param others Names of additional LLM models that produced this code or participated in preliminary reasoning.
+ * @param id Identifier of the change this code belongs to, in kebab-case.
+ * @param ref Public reference to the change, e.g. "PR #123", "Issue #999", or a link to the discussion.
  * @param note Brief rationale, reasoning and description behind this code that could be useful for reviewers or newer LLM models.
- * @param ref Reference to the context of this code, e.g. "PR #123", "Issue #999", or a publicly accessible link to the discussion.
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.SOURCE)
@@ -169,6 +183,7 @@ annotation class MadeByHuman(
 annotation class MadeByLLM(
   val value: String,
   val others: Array<String> = [],
-  val note: String = "",
-  val ref: String = ""
+  val id: String = "",
+  val ref: String = "",
+  val note: String = ""
 )
