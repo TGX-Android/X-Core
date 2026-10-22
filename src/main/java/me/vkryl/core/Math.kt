@@ -26,7 +26,7 @@ fun fromTo (from: Float, to: Float, factor: Float): Float {
   return if (from != to) from + (to - from) * factor else from
 }
 fun fromTo (from: Int, to: Int, factor: Float): Int {
-  return fromTo(from.toFloat(), to.toFloat(), factor).roundToInt()
+  return if (from != to) (from + (to.toDouble() - from) * factor).roundToInt() else from
 }
 
 @JvmOverloads
