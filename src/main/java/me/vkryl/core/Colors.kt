@@ -21,6 +21,7 @@ package me.vkryl.core
 
 import android.graphics.Color
 import androidx.core.graphics.toColorInt
+import kotlin.math.roundToInt
 
 @JvmOverloads
 fun parseHexColor (hex: String, allowColorNames: Boolean = true): Int {
@@ -114,12 +115,24 @@ fun fromToArgb (fromArgb: Int, toArgb: Int, factor: Float): Int {
     fromArgb == toArgb -> toArgb
     factor <= 0f -> fromArgb
     factor >= 1f -> toArgb
-    else -> {
-      val alpha = fromTo(Color.alpha(fromArgb), Color.alpha(toArgb), factor)
+    Color.alpha(fromArgb) == Color.alpha(toArgb) -> {
       val red = fromTo(Color.red(fromArgb), Color.red(toArgb), factor)
       val green = fromTo(Color.green(fromArgb), Color.green(toArgb), factor)
       val blue = fromTo(Color.blue(fromArgb), Color.blue(toArgb), factor)
-      Color.argb(alpha, red, green, blue)
+      Color.argb(Color.alpha(toArgb), red, green, blue)
+    }
+    else -> {
+      // Channels are premultiplied by alpha, so the more transparent color affects the result less,
+      // e.g. black of Color.TRANSPARENT doesn't darken it
+      val fromAlpha = Color.alpha(fromArgb)
+      val toAlpha = Color.alpha(toArgb)
+      val alpha = fromTo(fromAlpha.toFloat(), toAlpha.toFloat(), factor)
+      val toWeight = toAlpha * factor / alpha
+      val fromWeight = 1f - toWeight
+      val red = Color.red(fromArgb) * fromWeight + Color.red(toArgb) * toWeight
+      val green = Color.green(fromArgb) * fromWeight + Color.green(toArgb) * toWeight
+      val blue = Color.blue(fromArgb) * fromWeight + Color.blue(toArgb) * toWeight
+      Color.argb(alpha.roundToInt(), red.roundToInt(), green.roundToInt(), blue.roundToInt())
     }
   }
 }
