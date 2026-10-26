@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Semaphore;
 
+import me.vkryl.core.lambda.RunnableData;
+
 /**
  * Object that keeps references to items and allows modifying itself during iteration.
  *
@@ -133,7 +135,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
   /**
    * @return Number of added elements
    * */
-  public final int addAll (ReferenceList<T> itemsToAdd) {
+  public int addAll (ReferenceList<T> itemsToAdd) {
     int count = 0;
     for (T item : itemsToAdd) {
       if (add(item))
@@ -145,7 +147,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
   /**
    * @return False when item is already present in the list
    */
-  public final boolean add (@NonNull T itemToAdd) {
+  public boolean add (@NonNull T itemToAdd) {
     synchronized (items) {
       int i = indexOf(itemToAdd);
       if (i != -1) {
@@ -164,7 +166,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
     }
   }
 
-  public final boolean remove (@NonNull T itemToRemove) {
+  public boolean remove (@NonNull T itemToRemove) {
     synchronized (items) {
       int i = indexOf(itemToRemove);
       if (i == -1) {
@@ -184,7 +186,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
     }
   }
 
-  public final void clear () {
+  public void clear () {
     synchronized (items) {
       if (isLocked) {
         for (Reference<T> item : items) {
@@ -200,7 +202,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
     }
   }
 
-  public final boolean isEmpty () {
+  public boolean isEmpty () {
     synchronized (items) {
       if (isLocked) {
         return items.isEmpty() && itemsToAdd.isEmpty();
@@ -211,7 +213,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
     }
   }
 
-  public final boolean hasReferences () {
+  public boolean hasReferences () {
     synchronized (items) {
       if (isLocked) {
         return items.size() != 0 || itemsToAdd.size() != 0;
@@ -225,14 +227,8 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
 
   @NonNull
   @Override
-  public final Iterator<T> iterator () {
-    if (semaphore != null) {
-      try {
-        semaphore.acquire();
-      } catch (InterruptedException t) {
-        throw new IllegalStateException();
-      }
-    }
+  public Iterator<T> iterator () {
+    acquire();
     synchronized (items) {
       if (cacheIterator) {
         lock();
@@ -250,22 +246,92 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
       }
     }
   }
+  private void acquire () {
+    if (semaphore != null) {
+      try {
+        semaphore.acquire();
+      } catch (InterruptedException t) {
+        throw new IllegalStateException();
+      }
+    }
+  }
+
+  private void release () {
+    if (semaphore != null) {
+      semaphore.release();
+    }
+  }
+
+  private @Nullable T getPresentItem (int index) {
+    if (index >= items.size()) {
+      return null;
+    }
+    Reference<T> reference = items.get(index);
+    T item = reference.get();
+    return item != null && !itemsToRemove.contains(reference) ? item : null;
+  }
+
+  /**
+   * @return The item that iteration returns first, or null when there's none
+   */
+  public @Nullable T findFirst () {
+    synchronized (items) {
+      for (int i = items.size() - 1; i >= 0; i--) {
+        T item = getPresentItem(i);
+        if (item != null) {
+          return item;
+        }
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Calls {@code callback} with each item, like iteration by {@link #iterator()} does,
+   * but without creating an iterator.
+   */
+  public void forEachItem (@NonNull RunnableData<T> callback) {
+    acquire();
+    try {
+      int index;
+      synchronized (items) {
+        if (cacheIterator) {
+          lock();
+        }
+        index = items.size();
+      }
+      try {
+        while (index > 0) {
+          T item;
+          synchronized (items) {
+            item = getPresentItem(--index);
+          }
+          if (item != null) {
+            callback.runWithData(item);
+          }
+        }
+      } finally {
+        if (cacheIterator) {
+          synchronized (items) {
+            unlock();
+          }
+        }
+      }
+    } finally {
+      release();
+    }
+  }
 
   private final class Itr implements Iterator<T> {
     private int index = items.size();
     private T nextItem;
 
     @Override
-    public final boolean hasNext () {
+    public boolean hasNext () {
       synchronized (items) {
         nextItem = null;
         while (nextItem == null && index > 0) {
-          Reference<T> reference = items.get(--index);
-          T item = reference.get();
-          if (item != null && !itemsToRemove.contains(reference)) {
-            nextItem = item;
-            break;
-          }
+          nextItem = getPresentItem(--index);
         }
         if (nextItem == null) {
           if (cacheIterator) {
@@ -274,9 +340,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
         }
       }
       if (nextItem == null) {
-        if (semaphore != null) {
-          semaphore.release();
-        }
+        release();
         return false;
       }
       return true;
@@ -284,7 +348,7 @@ public final class ReferenceList<T> implements Iterable<T>, ReferenceCreator<T> 
 
     @NonNull
     @Override
-    public final T next () {
+    public T next () {
       if (nextItem == null) {
         throw new NoSuchElementException();
       }

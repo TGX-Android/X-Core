@@ -132,7 +132,7 @@ public class ReferenceUtils {
 
   public static <T> void gcReferenceList (List<Reference<T>> list) {
     if (list != null) {
-      final int size = list.size() - 1;
+      final int size = list.size();
       for (int i = size - 1; i >= 0; i--) {
         T data = list.get(i).get();
         if (data == null) {
