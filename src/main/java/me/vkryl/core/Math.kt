@@ -30,10 +30,10 @@ fun fromTo (from: Int, to: Int, factor: Float): Int {
 }
 
 @JvmOverloads
-fun clamp (value: Float, min: Float = 0.0f, max: Float = 1.0f) = value.coerceIn(min .. max)
+fun clamp (value: Float, min: Float = 0.0f, max: Float = 1.0f) = value.coerceIn(min, max)
 @JvmOverloads
-fun clamp (value: Double, min: Double = 0.0, max: Double = 1.0) = value.coerceIn(min .. max)
-fun clamp (value: Int, min: Int, max: Int) = value.coerceIn(min .. max)
+fun clamp (value: Double, min: Double = 0.0, max: Double = 1.0) = value.coerceIn(min, max)
+fun clamp (value: Int, min: Int, max: Int) = value.coerceIn(min, max)
 
 fun modulo (x: Int, y: Int): Int = if (x >= 0) x % y else y - -x % y
 fun modulo (x: Float, y: Float): Float = if (x >= 0) x % y else y - -x % y
