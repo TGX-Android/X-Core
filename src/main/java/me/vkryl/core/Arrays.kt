@@ -341,7 +341,7 @@ fun LongSparseArray<LongArray>?.contentEquals(to: LongSparseArray<LongArray>?): 
     this == null && to == null -> true
     this == null || to == null || this.size() != to.size() -> false
     else -> {
-      for (i in 0 .. size()) {
+      for (i in 0 until size()) {
         if (keyAt(i) != to.keyAt(i) || !valueAt(i).contentEquals(to.valueAt(i)))
           return false
       }
