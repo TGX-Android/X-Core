@@ -54,7 +54,7 @@ fun delete(files: Array<File>?, recursive: Boolean): Boolean {
     for (file in files) {
       if (!delete(file, recursive)) success = false
     }
-    return success
+    success
   }
 }
 
@@ -160,7 +160,6 @@ fun deleteFile(path: String): Boolean = deleteFile(File(path))
 fun deleteFile(file: File): Boolean {
   try {
     return !file.exists() || file.delete()
-  } catch (ignored: Throwable) {
-  }
+  } catch (_: Throwable) { }
   return false
 }
