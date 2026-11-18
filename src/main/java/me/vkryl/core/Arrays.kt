@@ -264,6 +264,21 @@ fun <T> MutableList<T>.move(fromPosition: Int, toPosition: Int) {
   }
 }
 
+fun <T> MutableList<T>.insertionSort(comparator: Comparator<in T>) {
+  // Never throws when the order changes during the sort (unlike Collections.sort)
+  var i = 1
+  while (i < size) {
+    val item = this[i]
+    var j = i - 1
+    while (j >= 0 && comparator.compare(this[j], item) > 0) {
+      this[j + 1] = this[j]
+      j--
+    }
+    this[j + 1] = item
+    i++
+  }
+}
+
 fun List<*>.ensureCapacity(size: Int) {
   if (this is ArrayList<*>) {
     this.ensureCapacity(size)
